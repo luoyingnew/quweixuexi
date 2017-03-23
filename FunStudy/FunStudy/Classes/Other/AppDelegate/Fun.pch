@@ -1,0 +1,135 @@
+//
+//  Fun.pch
+//  FunStudy
+//
+//  Created by 唐天成 on 2016/11/3.
+//  Copyright © 2016年 唐天成. All rights reserved.
+//
+
+#ifndef Fun_pch
+#define Fun_pch
+
+//添加头文件
+#import "TCConst.h"
+#import "UIView+FrameExpand.h"
+#import "UITextField+LimitLength.h"
+#import "UIButton+Custom.h"
+#import "UILabel+LabelStyle.h"
+#import "UIImage+XPKit.h"
+#import "UIViewController+Alert.h"
+#import "JJHud.h"
+#import "Masonry.h"
+#import "JJBaseViewController.h"
+#import "User.h"
+#import "HFNetWork.h"
+#import "Util.h"
+#import "JJHud.h"
+#import "MJExtension.h"
+#import "NSString+XPKit.h"
+#import <UIImageView+WebCache.h>
+#import "MJRefresh.h"
+
+
+// 缓存主目录   音频
+#define JJAudioCachesDirectory [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"JJAudioCache"]
+
+// 保存文件名    下载的音频
+#define JJAudioFileNameMP3(url) [NSString stringWithFormat:@"%@.mp3",url.MD5]
+//保存文件名    录音的音频
+#define JJAudioFileNameWAV(url) [NSString stringWithFormat:@"%@.wav",url.MD5]
+
+
+// 文件的存放路径（caches）   下载的音频
+#define JJAudioFileFullpathMP3(url) [JJAudioCachesDirectory stringByAppendingPathComponent:JJAudioFileNameMP3(url)]
+// 文件的存放路径（caches）   录音的音频
+#define JJAudioFileFullpathWAV(url) [JJAudioCachesDirectory stringByAppendingPathComponent:JJAudioFileNameWAV(url)]
+
+
+
+/**当前版本号 */
+#define kVersion        [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]
+
+//屏幕宽高
+#define SCREEN_WIDTH         ([UIScreen mainScreen].bounds).size.width
+#define SCREEN_HEIGHT        ([UIScreen mainScreen].bounds).size.height
+
+
+// iOS 系统版本
+#define IOS_VERSION       [[[UIDevice currentDevice] systemVersion] floatValue]
+
+//几种屏幕的尺寸
+#define KDevice_IS_iPhone4s ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 960), [[UIScreen mainScreen] currentMode].size) : NO)
+
+#define KDevice_IS_iPhone5 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 1136), [[UIScreen mainScreen] currentMode].size) : NO)
+
+#define KDevice_IS_iPhone6 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(750, 1334), [[UIScreen mainScreen] currentMode].size) : NO)
+
+#define KDevice_IS_iPhone6Plus ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1242, 2208), [[UIScreen mainScreen] currentMode].size) : NO)
+
+
+//屏幕比例
+//#define KWIDTH_6PLUS_SCALE        ([UIScreen mainScreen].bounds.size.width/414.0f)
+//#define KHEIGHT_6PLUS_SCALE       ([UIScreen mainScreen].bounds.size.height/736.0f)
+#define isPhone ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+
+//#ifdef isPad
+
+#define KWIDTH_IPHONE6_SCALE      (isPhone ? ([UIScreen mainScreen].bounds.size.width/375.0f ) : ([UIScreen mainScreen].bounds.size.height/667.0f + [UIScreen mainScreen].bounds.size.width/375.0f)/2)
+#define KHEIGHT_IPHONE6_SCALE     ([UIScreen mainScreen].bounds.size.height/667.0f)
+
+//#else
+//
+//#define KWIDTH_IPHONE6_SCALE      ([UIScreen mainScreen].bounds.size.width/375.0f)
+//#define KHEIGHT_IPHONE6_SCALE     ([UIScreen mainScreen].bounds.size.height/667.0f)
+//
+//
+//#endif
+//#define KWIDTH_IPHONE5_SCALE      ([UIScreen mainScreen].bounds.size.width/320.0f)
+//#define KHEIGHT_IPHONE5_SCALE     ([UIScreen mainScreen].bounds.size.height/568.0f)
+
+//NavBar高度
+//#define NAVIGATION_HEIGHT_44  44
+
+//NavBar高度 + statusBar高度
+#define NAVIGATION_HEIGHT  (64 * KWIDTH_IPHONE6_SCALE)
+
+//TabBar高度
+#define TABAR_HEIGHT       106
+
+//常用cell高度
+#define CELLS_HEIGHT          44
+
+//父子控制器titleHead高度
+#define PAGER_HEAD_HEIGHT     40
+
+//本项目最常用颜色
+#define NORMAL_COLOR         RGBA(0, 207, 255, 1)
+
+
+//RGB 色值 以及 alpha值
+#define RGBA(r, g, b,a)     [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:a]
+#define RGB(r, g, b)        [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
+#define RandomColor RGB(arc4random_uniform(255), arc4random_uniform(255), arc4random_uniform(255))
+
+// RGB 颜色转换（16进制->10进制） 例如UIColorFromRGB(0x000000);
+#define RGB_VALUE(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
+
+//重写Debug模式下打印日
+#ifdef DEBUG
+//#define DebugLog(...) NSLog(__VA_ARGS__)
+#define DebugLog(format, ...) printf("\n[%s] %s [第%d行] %s\n", __TIME__, __FUNCTION__, __LINE__, [[NSString stringWithFormat:format, ## __VA_ARGS__] UTF8String]);
+#define DebugMethod() NSLog(@"%s", __func__)
+#else
+#define DebugLog(...)
+#define DebugMethod()
+#endif
+
+
+//获取当前的类
+#define CURRENT_ClASS  NSStringFromClass([self class]
+
+//弱引用
+#define weakSelf(weakSelf) __weak __typeof(&*self)weakSelf = self;
+
+#endif /* XiaoHaiTun_pch */
